@@ -3,7 +3,7 @@ package ru.mail.kdallas777.mylabs.barber;
 public class BarbaerShopTest {
 
 	public static void main(String args[]) {
-		// Создаем парикмахерскую с парикмахером
+		// Create barbershop
 		BarberShop barberShopSim = new BarberShop();
 		
 		Thread barberThread = new Thread(barberShopSim.getBarber());

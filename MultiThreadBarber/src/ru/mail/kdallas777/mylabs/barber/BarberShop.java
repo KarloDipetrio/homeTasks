@@ -7,35 +7,35 @@ import java.util.Queue;
 import java.util.LinkedList;
 
 public class BarberShop {
-	// Количество мест в приемной
+	// Num chairs in waiting room
 	public static final int NUM_CHAIRS = 3;
 	
-	// Количество рабочих мест(парикмахеров)
+	// Num workspace
 	public static final int NUM_WORKSPACES = 1;
 	
-	// Время одной стрижки в мс
+	// Working time
 	public static final int WORK_TIME = 10000;
 			
-	// Рабочее место парикмахера
+	// Barbers workspace
 	private Customer barberWorkspace;
 	
 	private enum BarberState {
 		SLEEP, WORK, NOTHING
 	}
 	
-	// Состояние парикмахера
+	// Barbers state
 	BarberState stateFlag;
 	
-	// Количетсво обслуженных клиентов
+	// Num of customers served
 	private int customersCount;
 	
-	// Количество необслужанных клиентов
+	// Num of customers not served
 	private int leftCustomersCount;
 	
-	// Парикмахер
+	// Barber
 	private Barber barberMan;
 	
-	// Места в приемной
+	// Customers list in waiting room
 	private Queue<Customer> customerList = new LinkedList<Customer>();
 	
 	public BarberShop() {
@@ -46,7 +46,7 @@ public class BarberShop {
 	}
 	
 	//=============================================
-	// Методы управления данными
+	// Data control methods
 	//=============================================
 	public Queue<Customer> getCustomerList() {
 		return customerList;
@@ -56,9 +56,9 @@ public class BarberShop {
 		return barberMan;
 	}
 	//=============================================
-	// Методы посетителей
+	// Customers methods
 	//=============================================
-	// Занять место в приемной посетителем если есть свободные, возвращает true если удалось
+	// Sit in waiting room
 	private void sitInWaitingRoom(Customer customer) {
 		if( customerList.size() < NUM_CHAIRS ) {
 			customerList.add(customer);
@@ -69,7 +69,7 @@ public class BarberShop {
 		}
 	}
 	//---------------------------------------------
-	// Разбудить парикмахера и сесть на рабочее место если парикмахер спит
+	// Wake barber and sit in workspace
 	public synchronized void sitInWorkspace(Customer customer) {
 		if( checkBarber(customer) == BarberState.SLEEP ) {
 			System.out.println(customer.getCustomerName() + " разбудил парикмахера и сел на стрижку\n");
@@ -89,7 +89,7 @@ public class BarberShop {
 		
 	}
 	//---------------------------------------------
-	// Проверка состояния парикмахера со стороны клиента
+	// Check barbers state
 	// 0 - sleep
 	// 1 - work
 	public BarberState checkBarber(Customer customer) {
@@ -104,9 +104,9 @@ public class BarberShop {
 		return stateFlag;
 	}
 	//=============================================
-	// Методы парикмахера
+	// Barbers methods
 	//=============================================
-	// Проверка наличия посетителей со стороны парикмахера
+	// Check customers
 	public synchronized boolean checkCustomers() {
 		System.out.printf("Парикмахер проверяет наличие клиентов: В очереди %d из %d\n\n", customerList.size(), NUM_CHAIRS);
 		return !customerList.isEmpty();
@@ -160,14 +160,13 @@ public class BarberShop {
 		barberWorkspace = null;
 	}
 	//---------------------------------------------
-	// Позвать клиента из очереди в приемной если есть, иначе спать, возвращает true если удалось
+	// Call customer from waiting room
 	private synchronized void callCustomer() {
 		if( checkCustomers() ) {
 			barberWorkspace = customerList.poll();
 		} 
 	}
 	//---------------------------------------------
-	// Класс парикмахер
 	public class Barber implements Runnable {
 		public Barber() {
 			stateFlag = BarberState.NOTHING;
