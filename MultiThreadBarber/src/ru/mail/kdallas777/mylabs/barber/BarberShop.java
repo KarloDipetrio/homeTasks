@@ -62,17 +62,17 @@ public class BarberShop {
 	private void sitInWaitingRoom(Customer customer) {
 		if( customerList.size() < NUM_CHAIRS ) {
 			customerList.add(customer);
-			System.out.println(customer.getCustomerName() + " занял место в приемной\n");
+			System.out.println(customer.getCustomerName() + " sit in waiting room\n");
 		} else {
 			leftCustomersCount++;
-			System.out.println(customer.getCustomerName() + " ушел из парикмахерской, так как нет мест, количество необслужанных клиентов: "+ leftCustomersCount + "\n");
+			System.out.println(customer.getCustomerName() + " left from barbershop, because no free chairs, num of customers not served: "+ leftCustomersCount + "\n");
 		}
 	}
 	//---------------------------------------------
 	// Wake barber and sit in workspace
 	public synchronized void sitInWorkspace(Customer customer) {
 		if( checkBarber(customer) == BarberState.SLEEP ) {
-			System.out.println(customer.getCustomerName() + " разбудил парикмахера и сел на стрижку\n");
+			System.out.println(customer.getCustomerName() + " wake barber and sit in workspace\n");
 			barberWorkspace = customer;
 			stateFlag = BarberState.WORK;
 		} else {
@@ -93,12 +93,12 @@ public class BarberShop {
 	// 0 - sleep
 	// 1 - work
 	public BarberState checkBarber(Customer customer) {
-		System.out.print(customer.getCustomerName() + " проверяет состояние парикмахера:");
+		System.out.print(customer.getCustomerName() + " check barbers state:");
 		
 		if( stateFlag == BarberState.SLEEP ){
-			System.out.println(" парикмахер спит\n");
+			System.out.println(" barber sleeps\n");
 		} else {
-			System.out.println(" парикмахер занят работой\n");
+			System.out.println(" barber works\n");
 		}
 		
 		return stateFlag;
@@ -108,7 +108,7 @@ public class BarberShop {
 	//=============================================
 	// Check customers
 	public synchronized boolean checkCustomers() {
-		System.out.printf("Парикмахер проверяет наличие клиентов: В очереди %d из %d\n\n", customerList.size(), NUM_CHAIRS);
+		System.out.printf("Barber checks customers: in waiting room %d from %d\n\n", customerList.size(), NUM_CHAIRS);
 		return !customerList.isEmpty();
 	}
 	//---------------------------------------------
@@ -127,7 +127,7 @@ public class BarberShop {
 			if( stateFlag != BarberState.WORK)
 				stateFlag = BarberState.WORK;
 			
-			System.out.printf("Парикмахер стрижет посетителя: %s\n\n", barberWorkspace.getCustomerName());
+			System.out.printf("Barber shears customer: %s\n\n", barberWorkspace.getCustomerName());
 			
 			try {
 				wait(WORK_TIME);
@@ -136,7 +136,7 @@ public class BarberShop {
 				e.printStackTrace();
 			}
 			
-			System.out.printf("Парикмахер закончил стричь посетителя: %s\n\n", barberWorkspace.getCustomerName());
+			System.out.printf("Barber finished haircut: %s\n\n", barberWorkspace.getCustomerName());
 			customersCount++;
 			stateFlag = BarberState.NOTHING;
 			resetBarberWorkspace();
@@ -148,7 +148,7 @@ public class BarberShop {
 		if( stateFlag != BarberState.SLEEP ) {
 			stateFlag = BarberState.SLEEP;
 			
-			System.out.println("Парикмахер спит\n");
+			System.out.println("Barber sleeps\n");
 		}	
 	}
 	//---------------------------------------------

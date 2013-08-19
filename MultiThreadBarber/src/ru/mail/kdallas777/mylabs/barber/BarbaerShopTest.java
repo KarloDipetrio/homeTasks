@@ -10,7 +10,7 @@ public class BarbaerShopTest {
 		barberThread.start();	
 		
 		while(true) {
-			Thread customerThread = new Thread(new Customer(barberShopSim, "Посетитель "));
+			Thread customerThread = new Thread(new Customer(barberShopSim, "Customer "));
 			customerThread.start();
 			
 			try {
